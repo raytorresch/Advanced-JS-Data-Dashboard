@@ -41,28 +41,67 @@
 ## Estructura del Proyecto
 ```bash
 │ src/
-├── api/
+├── api/ # Data sources & HTTP
 │ ├── client.js # RobustApiClient con retry y timeout
 │ ├── data-sources.js # Múltiples APIs mock
 │ └── cache.js # Sistema de cache con TTL
-├── core/
+├── core/ # Business logic & transformaciones
 │ ├── data-transforms.js # Transformaciones funcionales
 │ ├── data-pipeline.js # Composición de procesamiento
 │ └── state-manager.js # Gestor de estado reactivo
-├── ui/
+├── ui/ # Presentation layer (deliberadamente simple)
 │ ├── renderer.js # Sistema de renderizado vanilla
 │ └── components.js # Componentes de UI
 └── app.js # Aplicación principal
 ```
+### **Arquitectura de Data Flow**
+```javascript
+// 1. API Layer (Data Fetching)
+const data = await apiClient.get('/metrics');
+
+// 2. Core Layer (Business Logic)  
+const processed = dataPipeline.process(data);
+
+// 3. State Layer (Reactive Updates)
+stateManager.setData('metrics', processed);
+
+// 4. UI Layer (Presentation)
+uiRenderer.update(processed);
+```
+
+##  Implementación tecnica
+**API Client**
+- Reintento de Request con backoff exponencial
+- Cancelación de request con AbortController
+- Caching inteligente con TTL
+- Manejo de errores
+
+**Data Pipeline**
+- Pure functions para transformación de datos
+- Patrones function composition
+- Flujo de datos inmutable
+- Data enrichment
+
+**Reactive State**
+- Patrones Pub/Sub con closures
+- Actualización de estado
+- Gestión de loading state
+- Aislamiento de error state
+
+**Reactive State**
+- PSeparation of Concerns: API, Core, UI
+- Dependency Inversion: Interfaz sobre implementación
+- Single Responsibility: Cada modulo tiene un propósito
+- Open/Closed: Extensible sin modificaciones
 
 ##  Instalación y Uso
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/user/repo.git
+git clone https://github.com/raytorresch/Advanced-JS-Data-Dashboard.git
 
 # Entrar al directorio
-cd dir-name
+cd Advanced-JS-Data-Dashboard
 
 # servir con un servidor local
 python3 -m http.server
@@ -70,6 +109,9 @@ python3 -m http.server
 # acceder a
 http://[::]:8000/
 ````
+
+*"Este proyecto forma parte de mi trayectoria del aprendizaje de la sintaxis hasta la comprensión e implementación de la arquitectura. La interfaz de usuario sencilla es intencional; el valor reside en la arquitectura."*
+
 ## Licencia
 Este proyecto está bajo la licencia MIT. Consulta el archivo [LICENSE](/LICENSE) para más información.
 
