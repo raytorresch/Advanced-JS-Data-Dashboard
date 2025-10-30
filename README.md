@@ -70,4 +70,6 @@ python3 -m http.server
 # acceder a
 http://[::]:8000/
 ````
+## Licencia
+Este proyecto está bajo la licencia MIT. Consulta el archivo [LICENSE](/LICENSE) para más información.
 
